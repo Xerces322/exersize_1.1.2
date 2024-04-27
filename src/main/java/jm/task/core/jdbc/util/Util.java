@@ -4,9 +4,6 @@ import jm.task.core.jdbc.model.User;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
-
-
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -16,7 +13,7 @@ public class Util {
     private final static String URL = "jdbc:mysql://localhost:3306/mydb";
     private final static String USERNAME = "root";
     private final static String PASSWORD = "Lvnds_3234";
-    private static final SessionFactory sessionFactory = buildSessionFactory();
+    private static SessionFactory sessionFactory;
 
     public static Connection getConnection() {
         Connection conn = null;
@@ -27,15 +24,15 @@ public class Util {
         }
         return conn;
     }
-    private static SessionFactory buildSessionFactory() {
-        Properties properties = new Properties();
-        properties.put(Environment.DRIVER, "com.mysql.jdbc.Driver");
-        properties.put(Environment.URL, URL);
-        properties.put(Environment.USER, USERNAME);
-        properties.put(Environment.PASS, PASSWORD);
-        return new Configuration().setProperties(properties).addAnnotatedClass(User.class).buildSessionFactory();
-    }
     public static SessionFactory getSessionFactory() {
+        if (sessionFactory == null) {
+            Properties properties = new Properties();
+            properties.put(Environment.DRIVER, "com.mysql.jdbc.Driver");
+            properties.put(Environment.URL, URL);
+            properties.put(Environment.USER, USERNAME);
+            properties.put(Environment.PASS, PASSWORD);
+            return new Configuration().setProperties(properties).addAnnotatedClass(User.class).buildSessionFactory();
+        }
         return sessionFactory;
     }
 }
